@@ -12,11 +12,11 @@ else
 endif
 
 
-CC=clang  # gcc or g++
-CFLAGS+=-ggdb3 -Os
-LDFLAGS+=-Wl,--gc-sections
+CC=~/linux_sysroot/bin/musl-gcc  # gcc or g++
+CFLAGS+=-ggdb3 -Os --sysroot=$SYSROOT -I$SYSROOT/usr/include
+LDFLAGS+=-Wl,--gc-sections --sysroot=$SYSROOT -L$SYSROOT/usr/lib
 CFLAGS+=-ggdb3 -Wall -DNORMALUNIX -DLINUX -DSNDSERV -D_DEFAULT_SOURCE # -DUSEASM
-LIBS+=-lm -lc -lX11
+LIBS+=-lm -lc
 
 # subdirectory for objects
 OBJDIR=build
