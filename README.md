@@ -1,3 +1,22 @@
+# Pranay's instructions
+
+This repository will provide you the doomgeneric executable in the doomgeneric/doomgeneric folder, along with doom1.wad which the
+game can't boot without. The makefile expects that the file doomgeneric_xlib.c is the one that contains the main function along with
+all the functions that we need to write ourselves to integrate with our frame buffer. You will see that everything is commented out
+because it is all dependent on X11, and I ripped it out so we can write our own integration code. Here are examples of other integrations
+that might be helpful. If you want to recompile doom, you first need to use the setup_sysroot script that I provided, run make in the
+doomgeneric/doomgeneric folder, and then to test in the kernel, drop the executable into the resources/executables folder, and rerun
+make blank_drive. You can take a look at the test_simple_c_ret testcase to know how to load and run executables from the sd card.
+Keep in mind it'll likely take close to a minute to load.
+
+The PincerOS's implementation of this (in Rust)
+https://github.com/pincerOS/kernel/blob/doom-testing/crates/doomgeneric/src/main.rs
+
+The SDL port, which should be relatively clear in the expected behavior of the functions
+https://github.com/ozkl/doomgeneric/blob/master/doomgeneric/doomgeneric_sdl.c
+
+
+
 # doomgeneric
 The purpose of doomgeneric is to make porting Doom easier.
 Of course Doom is already portable but with doomgeneric it is possible with just a few functions.
@@ -36,7 +55,7 @@ int main(int argc, char **argv)
     {
         doomgeneric_Tick();
     }
-    
+
     return 0;
 }
 ```
