@@ -11,12 +11,19 @@ else
 	VB=@
 endif
 
+SYSROOT := $(HOME)/linux_sysroot
+CC      := $(SYSROOT)/usr/bin/musl-gcc
 
-CC=~/linux_sysroot/bin/musl-gcc  # gcc or g++
-CFLAGS+=-ggdb3 -Os --sysroot=$SYSROOT -I$SYSROOT/usr/include
-LDFLAGS+=-Wl,--gc-sections --sysroot=$SYSROOT -L$SYSROOT/usr/lib
-CFLAGS+=-ggdb3 -Wall -DNORMALUNIX -DLINUX -DSNDSERV -D_DEFAULT_SOURCE # -DUSEASM
-LIBS+=-lm -lc
+CFLAGS += --sysroot=$(SYSROOT) \
+          -I$(SYSROOT)/usr/include \
+					-B$(SYSROOT)/usr/lib \
+          -Wall -D_DEFAULT_SOURCE
+
+LDFLAGS += --sysroot=$(SYSROOT) \
+           -static \
+           -L$(SYSROOT)/usr/lib \
+           -Wl,--gc-sections
+
 
 # subdirectory for objects
 OBJDIR=build
@@ -34,11 +41,7 @@ clean:
 	rm -f $(OUTPUT).map
 
 $(OUTPUT):	$(OBJS)
-	@echo [Linking $@]
-	$(VB)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) \
-	-o $(OUTPUT) $(LIBS) -Wl,-Map,$(OUTPUT).map
-	@echo [Size]
-	-$(CROSS_COMPILE)size $(OUTPUT)
+	$(VB)$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $(OUTPUT)
 
 $(OBJS): | $(OBJDIR)
 
